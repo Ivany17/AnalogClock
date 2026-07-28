@@ -8,6 +8,20 @@ const centerY = clockCanvas.height / 2;
 const radius = 180;
 
 function drawClock() {
+    if(customTime != null){
+        customTime.seconds++;
+        if(customTime.seconds === 60){
+            customTime.seconds = 0;
+            customTime.minutes++;
+            if(customTime.minutes === 60){
+                customTime.minutes = 0;
+                customTime.hours++;
+                if(customTime.hours === 24){
+                    customTime.hours = 0;
+                }
+            }
+        }
+    }
     ctx.clearRect(0, 0, clockCanvas.width, clockCanvas.height); // очистити canvas 
     // Малюємо білий циферблат з чорним ободком
     ctx.beginPath();                                   // починає новий шлях.
@@ -31,7 +45,7 @@ function drawClock() {
     }
 
     // Малюємо годинникову стрілку годинника
-    const hours = new Date().getHours();
+    const hours = customTime ? customTime.hours : new Date().getHours();
     const hourAngle = ((hours % 12) / 12) * Math.PI * 2;
     const hourLength = radius * 0.5;
     const endHourX = centerX + Math.sin(hourAngle) * hourLength;
@@ -43,7 +57,7 @@ function drawClock() {
     ctx.stroke();
 
     // Малюємо хвилинну стрілку годинника
-    const minutes = new Date().getMinutes();
+    const minutes = customTime ? customTime.minutes : new Date().getMinutes();
     const minuteAngle = (minutes / 60) * Math.PI * 2;
     const minuteLength = radius * 0.7;
     ctx.lineWidth = 2;
@@ -53,7 +67,35 @@ function drawClock() {
     ctx.moveTo(centerX, centerY);
     ctx.lineTo(endMinuteX, endMinuteY);
     ctx.stroke();
+
+    // Малюємо секундну стрілку годинника
+    const seconds = customTime ? customTime.seconds : new Date().getSeconds();
+    const secondAngle = (seconds / 60) * Math.PI * 2;
+    const secondLength = radius * 0.85;
+    ctx.lineWidth = 1;
+    const endSecondX = centerX + Math.sin(secondAngle) * secondLength;
+    const endSecondY = centerY - Math.cos(secondAngle) * secondLength;
+    ctx.strokeStyle = "red";
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.lineTo(endSecondX, endSecondY);
+    ctx.stroke();
 }
+
+let customTime = null
+const setBtn = document.getElementById('setBtn');
+setBtn.addEventListener('click', () => {
+    let input = prompt("Enter time (HH:MM)");
+    let parts = input.split(':');
+    let setHours = Number(parts[0]);
+    let setMinutes = Number(parts[1]);
+    if(setHours >= 0 && setHours <= 23 && setMinutes >= 0 && setMinutes <= 59){
+        customTime = { hours: setHours, minutes: setMinutes, seconds: 0 };
+        drawClock();
+    } else {
+        alert("You have set the wrong time.");
+    }
+});
 
 drawClock();
 setInterval(drawClock, 1000);
