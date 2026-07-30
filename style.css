@@ -40,11 +40,13 @@ h1 {
 }
 
 /* Стильна кнопка */
-#setBtn {
+#setBtn, #resetBtn {
+    width: 160px;
+    margin: 8px 10px;
     background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
     color: white;
     border: none;
-    padding: 12px 28px;
+    padding: 12px 0;
     font-size: 1rem;
     font-weight: 600;
     letter-spacing: 1px;
@@ -55,13 +57,13 @@ h1 {
     outline: none;
 }
 
-#setBtn:hover {
+#setBtn:hover, #resetBtn:hover{
     transform: translateY(-2px);
     box-shadow: 0 15px 25px rgba(79, 70, 229, 0.6);
     background: linear-gradient(135deg, #818cf8 0%, #6366f1 100%);
 }
 
-#setBtn:active {
+#setBtn:active, #resetBtn:active{
     transform: translateY(1px);
     box-shadow: 0 5px 10px rgba(79, 70, 229, 0.4);
 }

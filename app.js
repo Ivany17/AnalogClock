@@ -97,5 +97,11 @@ setBtn.addEventListener('click', () => {
     }
 });
 
+const resetBtn = document.getElementById('resetBtn');
+resetBtn.addEventListener('click', () => {
+    customTime = null;
+    drawClock();
+});
+
 drawClock();
 setInterval(drawClock, 1000);
